@@ -2,6 +2,15 @@ span {
  color: green;
 }
 
+button {
+ padding: 10px;
+ margin: 10px;
+}
+
+li {
+ text-align: center;
+}
+
 .row, .row-md {
  padding: 20px;
 }
