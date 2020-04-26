@@ -5,14 +5,60 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="stylesheet" href="style.css">
   <title>Nathan's Code Quiz</title>
 </head>
 <body>
-  <h1 id="question"></h1>
+  <!-- Timer for quiz -->
+      <div class="row-md align-self-end">
+        You have <span class="special" id="time">12:00</span> left for your quiz
+      </div>
+  <!-- Question and answers -->
+  <div class="row justify-content-md-center">
+    <div class="col-flex">
+      <h1 class="" id="question">Question goes here</h1>
+      <div class="row">
+        <ul class="col-md list-group answers">
+          <li>answers go here</li>
+          <li>answers go here</li>
+          <li>answers go here</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="row justify-content-md-center">
+    <button type="button" class="btn btn-success" id="startQuiz">Start the Quiz</button>
+  </div>
 
 
 
   <script>
+    // Timer for quiz
+      function quizTime(duration, display) {
+        let timer = duration, minutes, seconds
+        setInterval(function () {
+          minutes = parseInt(timer / 60, 10)
+          seconds = parseInt(timer % 60, 10)
+
+          minutes = minutes < 10 ? '0' + minutes : minutes
+          seconds = seconds < 10 ? '0' + seconds : seconds
+
+          display.textContent = minutes + ':' + seconds
+
+          if (--timer < 0) {
+            timer = duration
+            alert('Times Up!')
+          }
+        }, 1000)
+      }
+
+      document.getElementById('startQuiz').addEventListener('click', function () {
+        let twelveMinutes = 60 * 12,
+          display = document.getElementById('time')
+        quizTime(twelveMinutes, display)
+      })
+
+    // Array to store quiz questions
     let testQuestions = [
       {
         question: 'What is a JavaScript?',
@@ -37,7 +83,14 @@
       }
     ]
 
-    //timer bar that counts down to zero.
+    //generate list of multiple choice answers, correct answers get highlighted green, wrong ones, red.
+      const quizQuestion = () => {
+        for (let i = 0; i < array.length; i++) {
+          let itemElem = document.createElement('h1')
+          itemElem.textContent = 
+          
+        }
+      }
     //high score at the bottom that is stored in local memory
     //change heading when moving to next question
     //button that moves to next question (moves through the array of questions)
