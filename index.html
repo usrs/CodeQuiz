@@ -11,17 +11,14 @@
 <body>
   <!-- Timer for quiz -->
       <div class="row-md align-self-end">
-        You have <span class="special" id="time">12:00</span> left for your quiz
+        You have <span class="special" id="time">2:00</span> left for this question
       </div>
   <!-- Question and answers -->
   <div class="row justify-content-md-center">
-    <div class="col-flex question" id="question">
+    <div class="col-flex question" id="">
       <h1 id="question">This text should be replaced</h1>
       <div class="row">
-        <ul class="col-md list-group answers">
-          <li class="list-group-item">answers go here</li>
-          <li class="list-group-item">answers go here</li>
-          <li class="list-group-item">answers go here</li>
+        <ul class="col-md list-group answers" id="answers">
         </ul>
       </div>
     </div>
@@ -36,6 +33,8 @@
   <script>
     // Timer for quiz
       function quizTime(duration, display) {
+        loadQuestion()
+        loadAnswer()
         let timer = duration, minutes, seconds
         setInterval(function () {
           minutes = parseInt(timer / 60, 10)
@@ -52,52 +51,73 @@
           }
         }, 1000)
       }
-    // Triggers timer when button is pressed
+    // Triggers timer when start quiz button is pressed
       document.getElementById('startQuiz').addEventListener('click', function () {
-        let twelveMinutes = 60 * 12,
+        let twoMinutes = 60 * 2,
           display = document.getElementById('time')
-        quizTime(twelveMinutes, display)
+        quizTime(twoMinutes, display)
       })
 
     // Array to store score, and the high score
         let score = []
         let numWrong = []
         let highScore = []
-    // Array to store quiz questions
+        let currentQuestionIndex = 0
+    // Array to store quiz questions, answers, and which answer is correct.
     let testQuestions = [
       {
         question: 'What is a JavaScript?',
-        ans1: 'A coding language that gives added functionality to websites.',
-        ans2: 'a fancy type of mayo.',
-        ans3: 'A Coding language that gives added functionality to servers.',
-        ans4: 'A coding paradigm shift towards an ever shifting futurescape.'
+        answers: [
+         'A coding language that gives added functionality to websites.',
+         'a fancy type of mayo.',
+         'A Coding language that gives added functionality to servers.',
+         'A coding paradigm shift towards an ever shifting futurescape.'
+        ],
+        correctAnswer: 0
       },
       {
         question: 'Who created JavaScript?',
-        ans1: 'Steve Wozniak',
-        ans2: 'Brendan Eich',
-        ans3: 'Napster',
-        ans4: 'Bill Gates'
+        answers: [
+         'Steve Wozniak',
+         'Brendan Eich',
+         'Napster',
+         'Bill Gates'
+        ],
+        correctAnswer: 1
       },
       {
         question: 'Should you use var or let when declaring variables?',
-        ans1: 'Use var, it\'s a good catchall.',
-        ans2: 'Use let, var is outdated and not as descriptive.',
-        ans3: 'Use  var, it shows you\'re a veteran coder who sticks to their guns.',
-        ans4: 'but for real though, the answer is let. Just use let people.'
+        answers: [
+        'Use var, it\'s a good catchall.',
+        'Use let, var is outdated and not as descriptive.',
+        'Use  var, it shows you\'re a veteran coder who sticks to their guns.',
+        'but for real though, the answer is let. Just use let people.'
+        ],
+        correctAnswer: 1
       }
     ]
-
     //pulls questions from array and places it in div at top of page
     const loadQuestion = () => {
-      for (let i = 0; i < testQuestions.length; i++) {
-        const element = testQuestions[i];
-        document.getElementById('question').innertext = testQuestions[0].question
-        
-      }
+      document.getElementById('question').innerHTML = ''
+        let questionElem = document.createElement('h1')
+        questionElem.innerHTML = `
+        ${testQuestions[currentQuestionIndex].question}
+        `
+        document.getElementById('question').appendChild(questionElem)
     }
     //each question has two minutes before it marks it wrong and moves on.
     //generate list of multiple choice answers, correct answers get highlighted green, wrong ones, red.
+    const loadAnswer = () => {
+          for (let i = 0; i < testQuestions[currentQuestionIndex].answers.length; i++) {
+            let answerElem = document.createElement('li')
+            answerElem.classList.add('list-group-item')
+            answerElem.innerHTML =`
+            ${testQuestions[currentQuestionIndex].answers[i]}
+            `
+            document.getElementById('answers').appendChild(answerElem)
+            
+          }
+    }
     //high score at the bottom that is stored in local memory
     //change heading when moving to next question
     //button that moves to next question (moves through the array of questions)
