@@ -27,7 +27,10 @@
     <button type="button" class="btn btn-success" id="startQuiz">Start the Quiz</button>
   </div>
   <div class="row justify-content-md-center">
-    <h4 id="scoreCard">testing</h4>
+    <h4 class="" id="yourScore"></h4>
+  </div>
+  <div class="row justify-content-md-center">
+    <h4 class="" id="highScore"></h4>
   </div>
 
 
@@ -72,7 +75,6 @@
         correctAnswer: 1
       }
     ]
-
     //pulls questions from array and places it in div at top of page
     const loadQuestion = () => {
       document.getElementById('question').innerHTML = ''
@@ -98,7 +100,17 @@
             
           }
     }
+
+    if (currentQuestionIndex === testQuestions) {
+      document.getElementById('question').textContent = 'You Finished the Quiz!'
+      document.getElementById('yourScore').textContent = `You scored ${score} points`
+      document.getElementById('highScore').textContent = `Your best score is ${highScore}`
+      console.log('wow')
+    } else {
+      
+    }
     //high score at the bottom that is stored in local memory
+    
     //change heading when moving to next question
     //give points for choosing the correct answer
     let answerChecker = () => {
@@ -118,8 +130,6 @@
       loadAnswer()
       quizTime(twoMinutes, display)
     }
-    //change answers color on mouseover
-
     // Timer for quiz
       function quizTime(duration, display) {
         loadQuestion()
