@@ -16,7 +16,7 @@
   <!-- Question and answers -->
   <div class="row justify-content-md-center">
     <div class="col-flex question" id="">
-      <h1 id="question">This text should be replaced</h1>
+      <h1 id="question">A short JavaScript Quiz</h1>
       <div class="row">
         <ul class="col-md list-group answers" id="answers">
         </ul>
@@ -25,43 +25,19 @@
   </div>
   <div class="row justify-content-md-center">
     <button type="button" class="btn btn-success" id="startQuiz">Start the Quiz</button>
-    <button type="button" class="btn btn-secondary" id="next">Next Question</button>
+  </div>
+  <div class="row justify-content-md-center">
+    <h4 id="scoreCard">testing</h4>
   </div>
 
 
 
   <script>
-    // Timer for quiz
-      function quizTime(duration, display) {
-        loadQuestion()
-        loadAnswer()
-        let timer = duration, minutes, seconds
-        setInterval(function () {
-          minutes = parseInt(timer / 60, 10)
-          seconds = parseInt(timer % 60, 10)
-
-          minutes = minutes < 10 ? '0' + minutes : minutes
-          seconds = seconds < 10 ? '0' + seconds : seconds
-
-          display.textContent = minutes + ':' + seconds
-
-          if (--timer < 0) {
-            timer = duration
-            alert('Times Up!')
-          }
-        }, 1000)
-      }
-    // Triggers timer when start quiz button is pressed
-      document.getElementById('startQuiz').addEventListener('click', function () {
-        let twoMinutes = 60 * 2,
-          display = document.getElementById('time')
-        quizTime(twoMinutes, display)
-      })
-
+    
     // Array to store score, and the high score
-        let score = []
-        let numWrong = []
-        let highScore = []
+        let score = 0
+        let numWrong = 0
+        let highScore = 0
         let currentQuestionIndex = 0
     // Array to store quiz questions, answers, and which answer is correct.
     let testQuestions = [
@@ -96,6 +72,7 @@
         correctAnswer: 1
       }
     ]
+
     //pulls questions from array and places it in div at top of page
     const loadQuestion = () => {
       document.getElementById('question').innerHTML = ''
@@ -105,12 +82,15 @@
         `
         document.getElementById('question').appendChild(questionElem)
     }
-    //each question has two minutes before it marks it wrong and moves on.
-    //generate list of multiple choice answers, correct answers get highlighted green, wrong ones, red.
+        //generate list of multiple choice answers, correct answers get highlighted green, wrong ones, red.
     const loadAnswer = () => {
           for (let i = 0; i < testQuestions[currentQuestionIndex].answers.length; i++) {
             let answerElem = document.createElement('li')
             answerElem.classList.add('list-group-item')
+            answerElem.addEventListener('click', () => {
+              answerChecker()
+            })
+            answerElem.id = [i]
             answerElem.innerHTML =`
             ${testQuestions[currentQuestionIndex].answers[i]}
             `
@@ -120,23 +100,54 @@
     }
     //high score at the bottom that is stored in local memory
     //change heading when moving to next question
-    //button that moves to next question (moves through the array of questions)
     //give points for choosing the correct answer
-    let trueChecker = () => {
-      document.addEventListener('click', (event) => {
-        if (event.target = true) {
-          score.push(1)
-          alert('Nice! you got it right!')
-        } else {
-          numWrong.push(1)
-          alert('Sorry, not quite correct.')
-        }
-        loadQuestion()
-      })
-    
+    let answerChecker = () => {
+      if (event.srcElement.id == testQuestions[currentQuestionIndex].correctAnswer) {
+        score += 1
+        currentQuestionIndex += 1
+        document.getElementById('question').innerHTML = ''
+        document.getElementById('answers').innerHTML = ''
+
+      } else {
+        numWrong += 1
+        currentQuestionIndex += 1
+        document.getElementById('question').innerHTML = ''
+        document.getElementById('answers').innerHTML = ''
+      }
+      loadQuestion()
+      loadAnswer()
+      quizTime(twoMinutes, display)
     }
     //change answers color on mouseover
 
+    // Timer for quiz
+      function quizTime(duration, display) {
+        loadQuestion()
+        loadAnswer()
+        let timer = duration, minutes, seconds
+        setInterval(function () {
+          minutes = parseInt(timer / 60, 10)
+          seconds = parseInt(timer % 60, 10)
+
+          minutes = minutes < 10 ? '0' + minutes : minutes
+          seconds = seconds < 10 ? '0' + seconds : seconds
+
+          display.textContent = minutes + ':' + seconds
+          //each question has two minutes before it marks it wrong and moves on.
+          if (--timer < 0) {
+            timer = duration
+            alert('Times Up!')
+            numWrong += 1
+          }
+        }, 1000)
+      }
+      // Triggers timer when start quiz button is pressed
+      document.getElementById('startQuiz').addEventListener('click', function () {
+        let twoMinutes = 60 * 2,
+          display = document.getElementById('time')
+        quizTime(twoMinutes, display)
+        document.getElementById('startQuiz').style.visibility = 'hidden'
+      })
 
 
   </script>
